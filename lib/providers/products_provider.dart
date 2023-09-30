@@ -1,17 +1,17 @@
+import 'package:base_store/providers/providers.dart';
 import 'package:flutter/material.dart';
 
 import './data/fake_products.dart';
-import './models/models.dart';
 
 class ProductsProvider with ChangeNotifier {
-  List<Product> items = dummyProducts;
+  List<ProductProvider> items = dummyProducts;
 
-  List<Product> get products {
+  List<ProductProvider> get products {
     return [...items];
   }
 
-  Product findById(String id) {
-    return items.firstWhere((element) => element.id == id);
+  ProductProvider findById(String id) {
+    return items.firstWhere((item) => item.id == id);
   }
 
   void addProduct() {

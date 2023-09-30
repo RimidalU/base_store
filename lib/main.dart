@@ -2,8 +2,8 @@ import 'package:base_store/providers/products_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'features/features.dart';
-import 'ui/ui.dart';
+import './features/features.dart';
+import './ui/ui.dart';
 
 void main() {
   runApp(const MyApp());

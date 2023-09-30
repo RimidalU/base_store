@@ -15,6 +15,7 @@ ThemeData themeData(context) {
       ),
     ),
     colorScheme: ColorScheme.fromSeed(
+      error: const Color(0xffd64743),
       seedColor: primaryColor,
       brightness: Brightness.dark,
     ),
