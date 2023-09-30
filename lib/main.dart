@@ -1,8 +1,8 @@
-import 'package:base_store/providers/products_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './features/features.dart';
+import './providers/providers.dart';
 import './ui/ui.dart';
 
 void main() {
@@ -14,8 +14,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext context) => ProductsProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (BuildContext context) => ProductsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => CartProvider(),
+        ),
+      ],
       child: MaterialApp(
         title: 'Base Store',
         debugShowCheckedModeBanner: false,
