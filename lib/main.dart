@@ -1,4 +1,6 @@
+import 'package:base_store/providers/products_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'features/features.dart';
 import 'ui/ui.dart';
@@ -12,14 +14,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Base Store',
-      debugShowCheckedModeBanner: false,
-      theme: themeData(context),
-      home: const ProductsOverviewScreen(),
-      routes: {
-        ProductDetailScreen.routeName: (context) => const ProductDetailScreen()
-      },
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => ProductsProvider(),
+      child: MaterialApp(
+        title: 'Base Store',
+        debugShowCheckedModeBanner: false,
+        theme: themeData(context),
+        home: const ProductsOverviewScreen(),
+        routes: {
+          ProductDetailScreen.routeName: (context) =>
+              const ProductDetailScreen()
+        },
+      ),
     );
   }
 }
