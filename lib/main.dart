@@ -17,6 +17,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: themeData(context),
       home: const ProductsOverviewScreen(),
+      routes: {
+        ProductDetailScreen.routeName: (context) => const ProductDetailScreen()
+      },
     );
   }
 }
