@@ -15,7 +15,7 @@ class CartItem {
   });
 }
 
-class Cart with ChangeNotifier {
+class CartProvider with ChangeNotifier {
   var uuid = const Uuid();
   final Map<String, CartItem> _items = {};
 
