@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/providers.dart';
+import '../../../ui/widgets/widgets.dart';
 import '../widgets/widgets.dart';
 
 enum FilterOptions {
@@ -19,8 +22,6 @@ var showFavoritesOnly = false;
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   @override
   Widget build(BuildContext context) {
-    print(showFavoritesOnly);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -31,6 +32,23 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ),
         ),
         actions: [
+          Consumer<CartProvider>(
+            builder: (
+              _,
+              cart,
+              staticChild,
+            ) =>
+                BadgeIcon(
+              value: cart.itemCount.toString(),
+              child: staticChild as Widget,
+            ),
+            child: IconButton(
+              icon: const Icon(
+                Icons.shopping_cart,
+              ),
+              onPressed: () {},
+            ),
+          ),
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
             onSelected: (FilterOptions value) {
