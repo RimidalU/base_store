@@ -32,23 +32,6 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ),
         ),
         actions: [
-          Consumer<CartProvider>(
-            builder: (
-              _,
-              cart,
-              staticChild,
-            ) =>
-                BadgeIcon(
-              value: cart.itemCount.toString(),
-              child: staticChild as Widget,
-            ),
-            child: IconButton(
-              icon: const Icon(
-                Icons.shopping_cart,
-              ),
-              onPressed: () {},
-            ),
-          ),
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
             onSelected: (FilterOptions value) {
@@ -71,6 +54,23 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                 child: Text('Show All'),
               ),
             ],
+          ),
+          Consumer<CartProvider>(
+            builder: (
+              _,
+              cart,
+              staticChild,
+            ) =>
+                BadgeIcon(
+              value: cart.itemCount.toString(),
+              child: staticChild as Widget,
+            ),
+            child: IconButton(
+              icon: const Icon(
+                Icons.shopping_cart,
+              ),
+              onPressed: () {},
+            ),
           ),
         ],
       ),
