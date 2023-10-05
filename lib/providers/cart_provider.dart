@@ -17,7 +17,7 @@ class CartItem {
 
 class CartProvider with ChangeNotifier {
   var uuid = const Uuid();
-  final Map<String, CartItem> _items = {};
+  Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {
     return {..._items};
@@ -70,6 +70,11 @@ class CartProvider with ChangeNotifier {
     String productId,
   ) {
     _items.remove(productId);
+    notifyListeners();
+  }
+
+  void clear() {
+    _items = {};
     notifyListeners();
   }
 }
