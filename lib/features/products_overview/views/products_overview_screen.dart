@@ -1,7 +1,7 @@
-import 'package:base_store/features/cart/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../features/cart/cart.dart';
 import '../../../providers/providers.dart';
 import '../../../ui/widgets/widgets.dart';
 import '../widgets/widgets.dart';
@@ -77,6 +77,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ),
         ],
       ),
+      drawer: const AppDrawer(),
       body: SafeArea(
         child: ProductsGrid(showFavoritesOnly),
       ),
