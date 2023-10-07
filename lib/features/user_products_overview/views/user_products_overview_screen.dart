@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/providers.dart';
+import '../widgets/user_product_item.dart';
 
 class UserProductsOverviewScreen extends StatelessWidget {
   const UserProductsOverviewScreen({super.key});
@@ -31,9 +32,15 @@ class UserProductsOverviewScreen extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(8),
           child: ListView.builder(
-              itemBuilder: (context, item) {
-                return Text(productsData.items[item].title);
-              },
+              itemBuilder: (context, item) => Column(
+                    children: [
+                      UserProductItem(
+                        imageUrl: productsData.items[item].imageUrl,
+                        title: productsData.items[item].title,
+                      ),
+                      const Divider(),
+                    ],
+                  ),
               itemCount: productsData.items.length),
         ));
   }
