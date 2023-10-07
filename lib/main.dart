@@ -38,6 +38,8 @@ class MyApp extends StatelessWidget {
           OrdersOverviewScreen.routeName: (context) =>
               const OrdersOverviewScreen(),
           OrderDetailScreen.routeName: (context) => const OrderDetailScreen(),
+          UserProductsOverviewScreen.routeName: (context) =>
+              const UserProductsOverviewScreen(),
         },
       ),
     );
