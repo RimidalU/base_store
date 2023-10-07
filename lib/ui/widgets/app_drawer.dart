@@ -30,6 +30,15 @@ class AppDrawer extends StatelessWidget {
                 .pushReplacementNamed(OrdersOverviewScreen.routeName);
           },
         ),
+        const Divider(),
+        ListTile(
+          leading: const Icon(Icons.edit),
+          title: const Text('to My Products'),
+          onTap: () {
+            Navigator.of(context)
+                .pushReplacementNamed(UserProductsOverviewScreen.routeName);
+          },
+        ),
       ]),
     );
   }
