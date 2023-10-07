@@ -1,4 +1,5 @@
 export './cart/cart.dart';
+export './edit_product/edit_product.dart';
 export './order_detail/order_detail.dart';
 export './orders_overview/orders_overview.dart';
 export './product_detail/product_detail.dart';

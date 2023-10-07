@@ -1,8 +1,9 @@
-import 'package:base_store/ui/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../features/features.dart';
 import '../../../providers/providers.dart';
+import '../../../ui/widgets/app_drawer.dart';
 import '../widgets/user_product_item.dart';
 
 class UserProductsOverviewScreen extends StatelessWidget {
@@ -26,7 +27,9 @@ class UserProductsOverviewScreen extends StatelessWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(EditProductScreen.routeName);
+              },
             ),
           ],
         ),
