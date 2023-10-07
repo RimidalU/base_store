@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../providers/providers.dart';
 
@@ -47,7 +48,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
               !imageUrlController.text.endsWith('.jpeg'))) {
         return;
       }
-
       setState(() {});
     }
   }
@@ -58,6 +58,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
       return;
     }
     form.currentState?.save();
+    Provider.of<ProductsProvider>(context, listen: false)
+        .addProduct(editedProduct);
+    Navigator.of(context).pop();
   }
 
   @override
