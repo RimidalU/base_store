@@ -88,9 +88,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
       return;
     }
     form.currentState?.save();
-    Provider.of<ProductsProvider>(context, listen: false)
-        .addProduct(editedProduct);
-    Navigator.of(context).pop();
+    if (editedProduct.id != '') {
+      Provider.of<ProductsProvider>(context, listen: false)
+          .updateProduct(editedProduct.id, editedProduct);
+      Navigator.of(context).pop();
+    } else {
+      Provider.of<ProductsProvider>(context, listen: false)
+          .addProduct(editedProduct);
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -126,11 +132,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                   onSaved: (value) {
                     editedProduct = ProductProvider(
-                      id: editedProduct.id,
+                      id: editedProduct.id.toString(),
                       title: value.toString(),
                       description: editedProduct.description,
                       price: editedProduct.price,
                       imageUrl: editedProduct.imageUrl,
+                      isFavorite: editedProduct.isFavorite,
                     );
                   },
                 ),
@@ -156,6 +163,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       id: editedProduct.id,
                       title: editedProduct.title,
                       description: editedProduct.description,
+                      isFavorite: editedProduct.isFavorite,
                       price: double.parse(
                         value.toString(),
                       ),
@@ -185,6 +193,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       description: value.toString(),
                       price: editedProduct.price,
                       imageUrl: editedProduct.imageUrl,
+                      isFavorite: editedProduct.isFavorite,
                     );
                   },
                 ),
@@ -238,6 +247,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             title: editedProduct.title,
                             description: editedProduct.description,
                             price: editedProduct.price,
+                            isFavorite: editedProduct.isFavorite,
                             imageUrl: value.toString(),
                           );
                         },
