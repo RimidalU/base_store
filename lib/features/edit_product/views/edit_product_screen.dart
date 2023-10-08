@@ -24,11 +24,41 @@ class _EditProductScreenState extends State<EditProductScreen> {
     title: '',
   );
 
+  var initValue = {
+    'description': '',
+    'imageUrl': '',
+    'price': '',
+    'title': '',
+  };
+
+  var isInit = true;
+
   @override
   void initState() {
     imageUrlFocusNode.addListener(updateImageUrl);
-
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (isInit) {
+      final productId = ModalRoute.of(context)?.settings.arguments;
+      if (productId != null) {
+        editedProduct = Provider.of<ProductsProvider>(context)
+            .findById(productId as String);
+
+        initValue = {
+          'description': editedProduct.description,
+          'imageUrl': '',
+          'price': editedProduct.price.toString(),
+          'title': editedProduct.title,
+        };
+        imageUrlController.text = editedProduct.imageUrl;
+      }
+    }
+    isInit = false;
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -85,6 +115,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
             child: ListView(
               children: [
                 TextFormField(
+                  initialValue: initValue['title'],
                   decoration: const InputDecoration(labelText: 'Title'),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
@@ -104,6 +135,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                 ),
                 TextFormField(
+                  initialValue: initValue['price'],
                   decoration: const InputDecoration(labelText: 'Price'),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
@@ -132,6 +164,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                 ),
                 TextFormField(
+                  initialValue: initValue['description'],
                   decoration: const InputDecoration(labelText: 'Description'),
                   textInputAction: TextInputAction.next,
                   maxLines: 3,
