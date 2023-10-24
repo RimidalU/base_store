@@ -40,18 +40,24 @@ class ProductsProvider with ChangeNotifier {
         },
       ),
     )
-        .then((response) {
-      final newProduct = ProductProvider(
-        id: jsonDecode(response.body)['name'],
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl,
-        isFavorite: false,
-      );
-      items.insert(0, newProduct);
-      notifyListeners();
-    });
+        .then(
+      (response) {
+        final newProduct = ProductProvider(
+          id: jsonDecode(response.body)['name'],
+          title: product.title,
+          description: product.description,
+          price: product.price,
+          imageUrl: product.imageUrl,
+          isFavorite: false,
+        );
+        items.insert(0, newProduct);
+        notifyListeners();
+      },
+    ).catchError(
+      (error) {
+        throw error;
+      },
+    );
   }
 
   void removeProduct(String productId) {
