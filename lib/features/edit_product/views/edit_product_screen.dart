@@ -83,7 +83,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void saveForm() {
+  Future<void> saveForm() async {
     final isValid = form.currentState!.validate();
     if (!isValid) {
       return;
@@ -100,11 +100,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
       });
       Navigator.of(context).pop();
     } else {
-      Provider.of<ProductsProvider>(context, listen: false)
-          .addProduct(editedProduct)
-          .catchError(
-        (_) {
-          return showDialog(
+      try {
+        await Provider.of<ProductsProvider>(context, listen: false)
+            .addProduct(editedProduct);
+      } catch (error) {
+        if (mounted) {
+          await showDialog(
             context: context,
             builder: (ctx) => AlertDialog(
               title: const Text('An error occurred!'),
@@ -114,12 +115,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.of(ctx).pop();
-                    setState(
-                      () {
-                        isLoading = false;
-                      },
-                    );
                     Navigator.of(context).pop();
                   },
                   child: const Text('Okay!'),
@@ -127,17 +122,31 @@ class _EditProductScreenState extends State<EditProductScreen> {
               ],
             ),
           );
-        },
-      ).then(
-        (_) {
-          setState(
-            () {
-              isLoading = false;
-            },
-          );
+        }
+      } finally {
+        setState(
+          () {
+            isLoading = false;
+          },
+        );
+        if (mounted) {
           Navigator.of(context).pop();
-        },
-      );
+        }
+      }
+      //   .catchError(
+      // (_) {
+
+      // },
+      // ).then(
+      //   (_) {
+      //     setState(
+      //       () {
+      //         isLoading = false;
+      //       },
+      //     );
+      //     Navigator.of(context).pop();
+      //   },
+      // );
     }
   }
 

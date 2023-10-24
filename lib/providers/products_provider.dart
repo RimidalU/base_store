@@ -23,41 +23,37 @@ class ProductsProvider with ChangeNotifier {
     return items.firstWhere((item) => item.id == id);
   }
 
-  Future<void> addProduct(ProductProvider product) {
+  Future<void> addProduct(ProductProvider product) async {
     const url =
         'https://base-store-e0c1b-default-rtdb.europe-west1.firebasedatabase.app/products.json';
 
-    return http
-        .post(
-      Uri.parse(url),
-      body: json.encode(
-        {
-          'title': product.title,
-          'description': product.description,
-          'price': product.price,
-          'imageUrl': product.imageUrl,
-          'isFavorite': product.isFavorite,
-        },
-      ),
-    )
-        .then(
-      (response) {
-        final newProduct = ProductProvider(
-          id: jsonDecode(response.body)['name'],
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          imageUrl: product.imageUrl,
-          isFavorite: false,
-        );
-        items.insert(0, newProduct);
-        notifyListeners();
-      },
-    ).catchError(
-      (error) {
-        throw error;
-      },
-    );
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: json.encode(
+          {
+            'title': product.title,
+            'description': product.description,
+            'price': product.price,
+            'imageUrl': product.imageUrl,
+            'isFavorite': product.isFavorite,
+          },
+        ),
+      );
+
+      final newProduct = ProductProvider(
+        id: jsonDecode(response.body)['name'],
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        isFavorite: false,
+      );
+      items.insert(0, newProduct);
+      notifyListeners();
+    } catch (error) {
+      rethrow;
+    }
   }
 
   void removeProduct(String productId) {
