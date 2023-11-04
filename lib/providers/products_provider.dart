@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 
+import '../models/models.dart';
 import '../providers/providers.dart';
 
 class ProductsProvider with ChangeNotifier {
@@ -85,34 +86,29 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  void removeProduct(String productId) async {
+  Future<void> removeProduct(String productId) async {
     final url =
-        'https://base-store-e0c1b-default-rtdb.europe-west1.firebasedatabase.app/products/$productId.json';
+        'https://base-store-e0c1b-default-rtdb.europe-west1.firebasedatabase.app/products/$productId.';
 
     final existingProductIndex =
         items.indexWhere((element) => element.id == productId);
 
     var existingProduct = items[existingProductIndex];
 
-    http
-        .delete(
-      Uri.parse(url),
-    )
-        .then(
-      (response) {
-        if (response.statusCode >= 400) {
-          throw Error();
-        }
-      },
-    ).catchError(
-      (_) {
-        items.insert(existingProductIndex, existingProduct);
-        notifyListeners();
-      },
-    );
     items.removeAt(existingProductIndex);
 
     notifyListeners();
+
+    final response = await http.delete(
+      Uri.parse(url),
+    );
+
+    if (response.statusCode >= 400) {
+      items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+
+      throw HttpException('Could not delete product.');
+    }
   }
 
   Future<void> updateProduct(
