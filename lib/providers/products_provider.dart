@@ -85,8 +85,33 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  void removeProduct(String productId) {
-    items.removeWhere((element) => element.id == productId);
+  void removeProduct(String productId) async {
+    final url =
+        'https://base-store-e0c1b-default-rtdb.europe-west1.firebasedatabase.app/products/$productId.json';
+
+    final existingProductIndex =
+        items.indexWhere((element) => element.id == productId);
+
+    var existingProduct = items[existingProductIndex];
+
+    http
+        .delete(
+      Uri.parse(url),
+    )
+        .then(
+      (response) {
+        if (response.statusCode >= 400) {
+          throw Error();
+        }
+      },
+    ).catchError(
+      (_) {
+        items.insert(existingProductIndex, existingProduct);
+        notifyListeners();
+      },
+    );
+    items.removeAt(existingProductIndex);
+
     notifyListeners();
   }
 
