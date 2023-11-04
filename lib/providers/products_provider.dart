@@ -90,14 +90,33 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateProduct(
+  Future<void> updateProduct(
     String id,
     ProductProvider newProductBody,
-  ) {
+  ) async {
     final prodIndex = items.indexWhere((element) => element.id == id);
     if (prodIndex >= 0) {
-      items[prodIndex] = newProductBody;
-      notifyListeners();
+      final url =
+          'https://base-store-e0c1b-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json';
+      try {
+        await http.patch(
+          Uri.parse(url),
+          body: jsonEncode(
+            {
+              'title': newProductBody.title,
+              'description': newProductBody.description,
+              'price': newProductBody.price,
+              'imageUrl': newProductBody.imageUrl,
+              'isFavorite': newProductBody.isFavorite
+            },
+          ),
+        );
+
+        items[prodIndex] = newProductBody;
+        notifyListeners();
+      } catch (error) {
+        rethrow;
+      }
     } else {
       // print('...')
     }
