@@ -20,31 +20,44 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var showFavoritesOnly = false;
+  var _isLoading = false;
 
-  @override
-  void initState() {
-    Provider.of<ProductsProvider>(context, listen: false).fetchAndSetProducts();
+// if no need listen
 
-// if need listen
+//   @override
+//   void initState() {
+//
+//     Provider.of<ProductsProvider>(context, listen: false).fetchAndSetProducts();
 
-    // Future.delayed(Duration.zero).then((_) {
-    //   Provider.of<ProductsProvider>(context).fetchAndSetProducts();
-    // });
-    super.initState();
-  }
+// // if need listen
+
+//     // Future.delayed(Duration.zero).then((_) {
+//     //   Provider.of<ProductsProvider>(context).fetchAndSetProducts();
+//     // });
+//     super.initState();
+//   }
 
 //variant with didChangeDependencies:
 
-  // var _isInit = true;
+  var _isInit = true;
 
-  // @override
-  // void didChangeDependencies() {
-  //   if (_isInit) {
-  //     Provider.of<ProductsProvider>(context).fetchAndSetProducts();
-  //   }
-  //   _isInit = false;
-  //   super.didChangeDependencies();
-  // }
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<ProductsProvider>(context).fetchAndSetProducts().then(
+        (_) {
+          setState(() {
+            _isLoading = false;
+          });
+        },
+      );
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +117,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       ),
       drawer: const AppDrawer(),
       body: SafeArea(
-        child: ProductsGrid(showFavoritesOnly),
+        child: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : ProductsGrid(showFavoritesOnly),
       ),
     );
   }
