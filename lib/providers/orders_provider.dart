@@ -1,5 +1,9 @@
+import 'package:base_store/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
+
+import 'dart:convert';
 
 import './cart_provider.dart';
 
@@ -26,19 +30,48 @@ class OrdersProvider with ChangeNotifier {
     return [..._orders];
   }
 
-  void addOrder(
+  Future<void> addOrder(
     List<CartItem> cartProducts,
     double total,
-  ) {
-    _orders.insert(
-      0,
-      OrderItem(
-        id: uuid.v4(),
-        amount: total,
-        products: cartProducts,
-        createAt: DateTime.now(),
-      ),
-    );
-    notifyListeners();
+  ) async {
+    const url =
+        'https://base-store-e0c1b-default-rtdb.europe-west1.firebasedatabase.app/orders.json';
+
+    final timeStamp = DateTime.now();
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: json.encode(
+          {
+            'amount': total,
+            'products': cartProducts
+                .map(
+                  (item) => {
+                    'id': item.id,
+                    'title': item.title,
+                    'quantity': item.quantity,
+                    'price': item.price,
+                  },
+                )
+                .toList(),
+            'createAt': timeStamp.toIso8601String(),
+          },
+        ),
+      );
+
+      _orders.insert(
+        0,
+        OrderItem(
+          id: jsonDecode(response.body)['name'],
+          amount: total,
+          products: cartProducts,
+          createAt: timeStamp,
+        ),
+      );
+      notifyListeners();
+    } catch (error) {
+      throw HttpException('Order not created');
+    }
   }
 }
