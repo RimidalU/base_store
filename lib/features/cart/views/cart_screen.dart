@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/providers.dart' show CartProvider, OrdersProvider;
+import '../../../providers/providers.dart' show CartProvider;
 import '../../features.dart' as ci;
+import '../widgets/widgets.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -39,20 +40,7 @@ class CartScreen extends StatelessWidget {
                         '\$${cart.totalAmount.toStringAsFixed(2)}',
                       ),
                     ),
-                    TextButton(
-                      onPressed: cart.totalAmount <= 0
-                          ? null
-                          : () {
-                              Provider.of<OrdersProvider>(context,
-                                      listen: false)
-                                  .addOrder(
-                                cart.items.values.toList(),
-                                cart.totalAmount,
-                              );
-                              cart.clear();
-                            },
-                      child: const Text("Order Now"),
-                    ),
+                    OrderButton(cart: cart),
                   ],
                 ),
               ),
