@@ -88,7 +88,7 @@ class ProductsProvider with ChangeNotifier {
 
   Future<void> removeProduct(String productId) async {
     final url =
-        'https://base-store-e0c1b-default-rtdb.europe-west1.firebasedatabase.app/products/$productId.';
+        'https://base-store-e0c1b-default-rtdb.europe-west1.firebasedatabase.app/products/$productId.json';
 
     final existingProductIndex =
         items.indexWhere((element) => element.id == productId);
