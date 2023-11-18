@@ -1,9 +1,9 @@
+import 'dart:convert';
+
 import 'package:base_store/models/models.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
-
-import 'dart:convert';
+import 'package:uuid/uuid.dart';
 
 import './cart_provider.dart';
 
@@ -24,10 +24,48 @@ class OrderItem {
 }
 
 class OrdersProvider with ChangeNotifier {
-  final List<OrderItem> _orders = [];
+  late List<OrderItem> _orders = [];
 
   List<OrderItem> get orders {
     return [..._orders];
+  }
+
+  Future<void> fetchAndAddOrders() async {
+    const url =
+        'https://base-store-e0c1b-default-rtdb.europe-west1.firebasedatabase.app/orders.json';
+
+    final response = await http.get(Uri.parse(url));
+
+    final List<OrderItem> loadedOrders = [];
+
+    final extractedItems = jsonDecode(response.body) as Map<String, dynamic>;
+
+    if (extractedItems.isEmpty) {
+      return;
+    }
+
+    extractedItems.forEach(
+      (orderId, orderData) {
+        loadedOrders.add(
+          OrderItem(
+            id: orderId,
+            amount: orderData['amount'],
+            createAt: DateTime.parse(
+              orderData['createAt'],
+            ),
+            products: (orderData['products'] as List<dynamic>)
+                .map((item) => CartItem(
+                    id: item['id'],
+                    title: item['title'],
+                    quantity: item['quantity'],
+                    price: item['price']))
+                .toList(),
+          ),
+        );
+      },
+    );
+    _orders = loadedOrders;
+    notifyListeners();
   }
 
   Future<void> addOrder(
