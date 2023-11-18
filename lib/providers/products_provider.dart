@@ -34,6 +34,10 @@ class ProductsProvider with ChangeNotifier {
 
       final extractData = jsonDecode(response.body) as Map<String, dynamic>;
 
+      if (extractData.isEmpty) {
+        return;
+      }
+
       final List<ProductProvider> loadedProducts = [];
 
       extractData.forEach((prodId, prodData) {
